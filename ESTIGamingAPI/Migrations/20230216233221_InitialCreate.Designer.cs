@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ESTIGamingAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230215153209_InitialCreate")]
+    [Migration("20230216233221_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

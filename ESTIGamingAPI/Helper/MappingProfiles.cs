@@ -9,6 +9,9 @@ namespace ESTIGamingAPI.Helper
         public MappingProfiles()
         {
             CreateMap<Game, GameDto>();
+            CreateMap<Genre, GenreDto>();
+            CreateMap<Platform, PlatformDto>();
+            CreateMap<User, UserDto>();
         }
     }
 }

@@ -59,7 +59,7 @@ namespace ESTIGamingAPI.Migrations
 
                     b.HasIndex("PlatformId");
 
-                    b.ToTable("Games", (string)null);
+                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("ESTIGamingAPI.Models.Genre", b =>
@@ -76,7 +76,7 @@ namespace ESTIGamingAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("ESTIGamingAPI.Models.Platform", b =>
@@ -93,7 +93,7 @@ namespace ESTIGamingAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Platforms", (string)null);
+                    b.ToTable("Platforms");
                 });
 
             modelBuilder.Entity("ESTIGamingAPI.Models.Role", b =>
@@ -110,7 +110,7 @@ namespace ESTIGamingAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("ESTIGamingAPI.Models.User", b =>
@@ -140,7 +140,7 @@ namespace ESTIGamingAPI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ESTIGamingAPI.Models.Game", b =>
