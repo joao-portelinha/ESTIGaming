@@ -33,6 +33,17 @@ namespace ESTIGamingAPI.Repository
             return _context.Games.OrderBy(g => g.Id).ToList();
         }
 
+        public bool CreateGame(Game game)
+        {
+            _context.Add(game);
+            return Save();
+        }
 
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }

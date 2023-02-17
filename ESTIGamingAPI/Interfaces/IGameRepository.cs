@@ -8,5 +8,7 @@ namespace ESTIGamingAPI.Interfaces
         Game GetGame(int id);
         Game GetGame(string name);
         bool GameExists(int id);
+        bool CreateGame(Game game);
+        bool Save();
     }
 }

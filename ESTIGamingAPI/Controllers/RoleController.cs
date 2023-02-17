@@ -34,7 +34,7 @@ namespace ESTIGamingAPI.Controllers
         [HttpGet("roleId")]
         [ProducesResponseType(200, Type = typeof(Role))]
         [ProducesResponseType(400)]
-        public IActionResult GetPlatform(int roleId)
+        public IActionResult GetRole(int roleId)
         {
             if (!_roleRepository.RoleExists(roleId))
                 return NotFound();
@@ -50,7 +50,7 @@ namespace ESTIGamingAPI.Controllers
         [HttpGet("user/{roleId}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
         [ProducesResponseType(400)]
-        public IActionResult GetGameByGenre(int roleId)
+        public IActionResult GetUserByRole(int roleId)
         {
             var users = _mapper.Map<List<UserDto>>(_roleRepository.GetUsersByRole(roleId));
 

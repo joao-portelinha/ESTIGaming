@@ -2,6 +2,7 @@
 using ESTIGamingAPI.Dto;
 using ESTIGamingAPI.Interfaces;
 using ESTIGamingAPI.Models;
+using ESTIGamingAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESTIGamingAPI.Controllers
@@ -50,7 +51,7 @@ namespace ESTIGamingAPI.Controllers
         [HttpGet("game/{platformId}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Game>))]
         [ProducesResponseType(400)]
-        public IActionResult GetGameByGenre(int platformId)
+        public IActionResult GetGameByPlatform(int platformId)
         {
             var games = _mapper.Map<List<GameDto>>(_platformRepository.GetGamesByPlatform(platformId));
 
@@ -60,5 +61,35 @@ namespace ESTIGamingAPI.Controllers
             return Ok(games);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreatePlatform([FromBody] PlatformDto platformCreate)
+        {
+            if (platformCreate == null)
+                return BadRequest(ModelState);
+
+            var platform = _platformRepository.GetPlatforms().Where(p => p.Name.Trim().ToUpper() == platformCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (platform != null)
+            {
+                ModelState.AddModelError("", "Essa plataforma já existe!");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var platformMap = _mapper.Map<Platform>(platformCreate);
+
+            if (!_platformRepository.CreatePlatform(platformMap))
+            {
+                ModelState.AddModelError("", "Erro na gravação.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Plataforma adicionada com sucesso!");
+        }
     }
 }

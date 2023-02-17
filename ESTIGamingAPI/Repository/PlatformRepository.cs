@@ -33,5 +33,17 @@ namespace ESTIGamingAPI.Repository
         {
             return _context.Platforms.Any(p => p.Id == id);
         }
+
+        public bool CreatePlatform(Platform platform)
+        {
+            _context.Add(platform);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }

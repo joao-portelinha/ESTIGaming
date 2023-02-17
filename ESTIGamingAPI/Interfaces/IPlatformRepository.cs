@@ -8,5 +8,7 @@ namespace ESTIGamingAPI.Interfaces
         Platform GetPlatform(int id);
         ICollection<Game> GetGamesByPlatform(int id);
         bool PlatformExists(int id);
+        bool CreatePlatform(Platform platform);
+        bool Save();
     }
 }

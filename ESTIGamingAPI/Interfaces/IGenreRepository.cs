@@ -8,5 +8,7 @@ namespace ESTIGamingAPI.Interfaces
         Genre GetGenre(int id);
         ICollection<Game> GetGamesByGenre(int id);
         bool GenreExists(int id);
+        bool CreateGenre(Genre genre);
+        bool Save();
     }
 }

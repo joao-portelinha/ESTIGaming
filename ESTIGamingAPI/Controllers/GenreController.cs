@@ -59,5 +59,36 @@ namespace ESTIGamingAPI.Controllers
 
             return Ok(games);
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateGenre([FromBody] GenreDto genreCreate)
+        {
+            if (genreCreate == null)
+                return BadRequest(ModelState);
+
+            var genre = _genreRepository.GetGenres().Where(g => g.Name.Trim().ToUpper() == genreCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (genre != null)
+            {
+                ModelState.AddModelError("", "Esse genero já existe!");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var genreMap = _mapper.Map<Genre>(genreCreate);
+
+            if (!_genreRepository.CreateGenre(genreMap))
+            {
+                ModelState.AddModelError("", "Erro na gravação.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Genero adicionado com sucesso!");
+        }
     }
 }
