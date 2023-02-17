@@ -12,6 +12,7 @@ namespace ESTIGamingAPI.Helper
             CreateMap<Genre, GenreDto>();
             CreateMap<Platform, PlatformDto>();
             CreateMap<User, UserDto>();
+            CreateMap<Role, RoleDto>();
         }
     }
 }

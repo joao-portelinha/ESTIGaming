@@ -2,9 +2,7 @@
 using ESTIGamingAPI.Dto;
 using ESTIGamingAPI.Interfaces;
 using ESTIGamingAPI.Models;
-using ESTIGamingAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace ESTIGamingAPI.Controllers
 {
