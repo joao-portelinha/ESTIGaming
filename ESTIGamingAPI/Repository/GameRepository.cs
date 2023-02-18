@@ -45,6 +45,12 @@ namespace ESTIGamingAPI.Repository
             return Save();
         }
 
+        public bool DeleteGame(Game game)
+        {
+            _context.Remove(game);
+            return Save();
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

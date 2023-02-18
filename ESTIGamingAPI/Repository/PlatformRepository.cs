@@ -52,5 +52,10 @@ namespace ESTIGamingAPI.Repository
             return saved > 0 ? true : false;
         }
 
+        public bool DeletePlatform(Platform platform)
+        {
+            _context.Remove(platform);
+            return Save();
+        }
     }
 }

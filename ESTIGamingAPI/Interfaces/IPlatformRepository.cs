@@ -10,6 +10,7 @@ namespace ESTIGamingAPI.Interfaces
         bool PlatformExists(int id);
         bool CreatePlatform(Platform platform);
         bool UpdatePlatform(Platform platform);
+        bool DeletePlatform(Platform platform);
         bool Save();
     }
 }

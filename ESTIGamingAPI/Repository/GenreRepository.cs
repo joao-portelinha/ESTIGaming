@@ -45,6 +45,12 @@ namespace ESTIGamingAPI.Repository
             return Save();
         }
 
+        public bool DeleteGenre(Genre genre)
+        {
+            _context.Remove(genre);
+            return Save();
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

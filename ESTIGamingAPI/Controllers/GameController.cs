@@ -106,5 +106,29 @@ namespace ESTIGamingAPI.Controllers
 
             return Ok("Atualizou o jogo "  + gameId + " com sucesso");
         }
+
+        [HttpDelete("gameId")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteGame(int gameId)
+        {
+            if (!_gameRepository.GameExists(gameId))
+            {
+                return NotFound();
+            }
+
+            var gameToDelete = _gameRepository.GetGame(gameId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_gameRepository.DeleteGame(gameToDelete))
+            {
+                ModelState.AddModelError("", "Erro ao apagar o jogo");
+            }
+
+            return Ok("Jogo " + gameId + " apagado com sucesso.");
+        }
     }
 }

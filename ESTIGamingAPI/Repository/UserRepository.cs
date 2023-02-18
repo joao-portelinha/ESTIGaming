@@ -39,6 +39,11 @@ namespace ESTIGamingAPI.Repository
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+        public bool DeleteUser(User user)
+        {
+            _context.Remove(user);
+            return Save();
+        }
 
         public bool UpdateUser(User user)
         {

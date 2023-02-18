@@ -120,5 +120,29 @@ namespace ESTIGamingAPI.Controllers
 
             return Ok("Atualizou a plataforma " + platformId + " com sucesso");
         }
+
+        [HttpDelete("platformId")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeletePlatform(int platformId)
+        {
+            if (!_platformRepository.PlatformExists(platformId))
+            {
+                return NotFound();
+            }
+
+            var platformToDelete = _platformRepository.GetPlatform(platformId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_platformRepository.DeletePlatform(platformToDelete))
+            {
+                ModelState.AddModelError("", "Erro ao apagar a plataforma");
+            }
+
+            return Ok("Plataforma " + platformId + " apagado com sucesso.");
+        }
     }
 }

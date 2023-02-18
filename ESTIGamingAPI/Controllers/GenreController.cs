@@ -119,5 +119,29 @@ namespace ESTIGamingAPI.Controllers
 
             return Ok("Atualizou o genero " + genreId + " com sucesso");
         }
+
+        [HttpDelete("genreId")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteGenre(int genreId)
+        {
+            if(!_genreRepository.GenreExists(genreId))
+            {
+                return NotFound();
+            }
+
+            var genreToDelete = _genreRepository.GetGenre(genreId);
+
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_genreRepository.DeleteGenre(genreToDelete))
+            {
+                ModelState.AddModelError("", "Erro ao apagar o genero");
+            }
+
+            return Ok("Genero " + genreId + " apagado com sucesso.");
+        }
     }
 }

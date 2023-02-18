@@ -10,6 +10,7 @@ namespace ESTIGamingAPI.Interfaces
         bool GameExists(int id);
         bool CreateGame(Game game);
         bool UpdateGame(Game game);
+        bool DeleteGame(Game game);
         bool Save();
     }
 }

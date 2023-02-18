@@ -112,5 +112,28 @@ namespace ESTIGamingAPI.Controllers
             return Ok("Atualizou o utilizador " + userId + " com sucesso");
         }
 
+        [HttpDelete("userId")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult Deleteuser(int userId)
+        {
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound();
+            }
+
+            var userToDelete = _userRepository.GetUser(userId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_userRepository.DeleteUser(userToDelete))
+            {
+                ModelState.AddModelError("", "Erro ao apagar o utilizador");
+            }
+
+            return Ok("Utilizador " + userId + " apagado com sucesso.");
+        }
     }
 }
