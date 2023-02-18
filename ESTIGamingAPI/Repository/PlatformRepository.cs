@@ -40,10 +40,17 @@ namespace ESTIGamingAPI.Repository
             return Save();
         }
 
+        public bool UpdatePlatform(Platform platform)
+        {
+            _context.Update(platform);
+            return Save();
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
     }
 }

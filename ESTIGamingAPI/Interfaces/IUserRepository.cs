@@ -8,6 +8,7 @@ namespace ESTIGamingAPI.Interfaces
         User GetUser(int id);
         bool UserExists(int id);
         bool CreateUser(User user);
+        bool UpdateUser(User user);
         bool Save();
     }
 }

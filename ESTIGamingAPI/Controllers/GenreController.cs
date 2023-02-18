@@ -41,7 +41,7 @@ namespace ESTIGamingAPI.Controllers
 
             var genre = _mapper.Map<GenreDto>(_genreRepository.GetGenre(genreId));
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             return Ok(genre);
@@ -54,7 +54,7 @@ namespace ESTIGamingAPI.Controllers
         {
             var games = _mapper.Map<List<GameDto>>(_genreRepository.GetGamesByGenre(genreId));
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             return Ok(games);
@@ -89,6 +89,35 @@ namespace ESTIGamingAPI.Controllers
             }
 
             return Ok("Genero adicionado com sucesso!");
+        }
+
+        [HttpPut("{genreId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateGenre(int genreId, [FromBody]GenreDto updatedGenre)
+        {
+            if(updatedGenre == null)
+                return BadRequest(ModelState);
+
+            if(genreId != updatedGenre.Id) 
+                return BadRequest(ModelState);
+
+            if(!_genreRepository.GenreExists(genreId))
+                return NotFound();
+
+            if(!ModelState.IsValid) 
+                return BadRequest(ModelState);
+
+            var genreMap = _mapper.Map<Genre>(updatedGenre);
+
+            if(!_genreRepository.UpdateGenre(genreMap))
+            {
+                ModelState.AddModelError("", "Erro ao atualizar o genero");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Atualizou o genero " + genreId + " com sucesso");
         }
     }
 }

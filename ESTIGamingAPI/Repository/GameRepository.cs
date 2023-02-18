@@ -39,6 +39,11 @@ namespace ESTIGamingAPI.Repository
             return Save();
         }
 
+        public bool UpdateGame(Game game)
+        {
+            _context.Update(game);
+            return Save();
+        }
 
         public bool Save()
         {

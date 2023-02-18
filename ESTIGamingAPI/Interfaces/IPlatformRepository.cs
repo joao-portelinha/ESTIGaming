@@ -9,6 +9,7 @@ namespace ESTIGamingAPI.Interfaces
         ICollection<Game> GetGamesByPlatform(int id);
         bool PlatformExists(int id);
         bool CreatePlatform(Platform platform);
+        bool UpdatePlatform(Platform platform);
         bool Save();
     }
 }

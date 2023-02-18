@@ -91,5 +91,34 @@ namespace ESTIGamingAPI.Controllers
 
             return Ok("Plataforma adicionada com sucesso!");
         }
+
+        [HttpPut("{platformId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdatePlatform(int platformId, [FromBody] PlatformDto updatedPlatform)
+        {
+            if (updatedPlatform == null)
+                return BadRequest(ModelState);
+
+            if (platformId != updatedPlatform.Id)
+                return BadRequest(ModelState);
+
+            if (!_platformRepository.PlatformExists(platformId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var platformMap = _mapper.Map<Platform>(updatedPlatform);
+
+            if (!_platformRepository.UpdatePlatform(platformMap))
+            {
+                ModelState.AddModelError("", "Erro ao atualizar a plataforma");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Atualizou a plataforma " + platformId + " com sucesso");
+        }
     }
 }

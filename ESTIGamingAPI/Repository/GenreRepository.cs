@@ -39,10 +39,16 @@ namespace ESTIGamingAPI.Repository
             return Save();
         }
 
+        public bool UpdateGenre(Genre genre)
+        {
+            _context.Update(genre);
+            return Save();
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();
-            return saved > 0 ? true: false;
+            return saved > 0 ? true : false;
         }
     }
 }
