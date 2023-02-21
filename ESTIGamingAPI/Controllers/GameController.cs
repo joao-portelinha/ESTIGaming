@@ -100,7 +100,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok("Atualizou o jogo "  + gameId + " com sucesso");
         }
 
-        [HttpDelete("gameId")]
+        [HttpDelete("{gameId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

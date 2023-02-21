@@ -33,7 +33,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok(genres);
         }
 
-        [HttpGet("genreId")]
+        [HttpGet("{genreId}")]
         [ProducesResponseType(200, Type = typeof(Genre))]
         [ProducesResponseType(400)]
         public IActionResult GetGenre(int genreId)
@@ -122,7 +122,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok("Atualizou o genero " + genreId + " com sucesso");
         }
 
-        [HttpDelete("genreId")]
+        [HttpDelete("{genreId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

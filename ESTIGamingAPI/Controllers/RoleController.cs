@@ -33,7 +33,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok(roles);
         }
 
-        [HttpGet("roleId")]
+        [HttpGet("{roleId}")]
         [ProducesResponseType(200, Type = typeof(Role))]
         [ProducesResponseType(400)]
         public IActionResult GetRole(int roleId)

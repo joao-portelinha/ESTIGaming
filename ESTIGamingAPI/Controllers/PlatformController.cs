@@ -34,7 +34,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok(platforms);
         }
 
-        [HttpGet("platformId")]
+        [HttpGet("{platformId}")]
         [ProducesResponseType(200, Type = typeof(Platform))]
         [ProducesResponseType(400)]
         public IActionResult GetPlatform(int platformId)
@@ -123,7 +123,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok("Atualizou a plataforma " + platformId + " com sucesso");
         }
 
-        [HttpDelete("platformId")]
+        [HttpDelete("{platformId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

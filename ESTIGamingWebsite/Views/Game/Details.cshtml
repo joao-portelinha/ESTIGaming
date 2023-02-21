@@ -37,9 +37,15 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.GenreId)
         </dt>
-        <dd class = "col-sm-10">
-            @ViewBag.Genre
-        </dd>       
+        <dd>
+            @ViewBag.GenreName
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PlatformId)
+        </dt>
+        <dd>
+            @ViewBag.PlatformName
+        </dd>    
     </dl>
     <img src="@Html.DisplayFor(model => model.ImageURL)" alt="Game Image" width="200" height="150">
 </div>

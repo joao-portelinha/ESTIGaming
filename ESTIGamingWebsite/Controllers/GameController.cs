@@ -88,16 +88,16 @@ namespace ESTIGamingWebsite.Controllers
         }
 
         [HttpGet]
-        [Route("/Game/Details/{gameId:int}")]
-        public async Task<IActionResult> Details(int gameId)
+        [Route("/Game/Details/{id:int}")]
+        public async Task<IActionResult> Details(int id)
         {
+            var requestGame = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Game/" + id);
+
             var client = _clientFactory.CreateClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var token = HttpContext.Session.GetString("token");
             client.DefaultRequestHeaders.Add("Token", token);
-
-            var requestGame = new HttpRequestMessage(HttpMethod.Get,
-                apiPath + "Game/" + gameId);
 
             var response = await client.SendAsync(requestGame);
 
@@ -120,27 +120,45 @@ namespace ESTIGamingWebsite.Controllers
 
             var responseGenre = await client.SendAsync(requestGenre);
 
-            var genre = "";
+            var gameGenre = "";
 
             if (responseGenre.IsSuccessStatusCode)
             {
                 using var stream2 = await responseGenre.Content.ReadAsStreamAsync();
-                var gameGenre = await JsonSerializer.DeserializeAsync<Genre>
+                var genre = await JsonSerializer.DeserializeAsync<Genre>
                     (stream2, new JsonSerializerOptions
                     { PropertyNameCaseInsensitive = true });
 
-                genre = gameGenre.Name;
-                ViewBag.Genre = genre;
+                gameGenre = genre.Name;
+                ViewBag.GenreName = gameGenre;
+            }
+
+            var requestPlatform = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Platform/" + game.PlatformId);
+
+            var responsePlatform = await client.SendAsync(requestPlatform);
+
+            var gamePlatform = "";
+
+            if (responsePlatform.IsSuccessStatusCode)
+            {
+                using var stream3 = await responsePlatform.Content.ReadAsStreamAsync();
+                var platform = await JsonSerializer.DeserializeAsync<Genre>
+                    (stream3, new JsonSerializerOptions
+                    { PropertyNameCaseInsensitive = true });
+
+                gamePlatform = platform.Name;
+                ViewBag.PlatformName = gamePlatform;
             }
 
             ViewBag.UserType = HttpContext.Session.GetString("userType");
             ViewBag.GameId = game.Id;
-            HttpContext.Session.SetString("Jogo", game.Id.ToString());
+            HttpContext.Session.SetString("game", game.Id.ToString());
 
             return View(game);
         }
 
-        public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create()
         {
             var client = _clientFactory.CreateClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

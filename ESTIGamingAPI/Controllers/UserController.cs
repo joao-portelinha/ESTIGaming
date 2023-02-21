@@ -32,7 +32,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok(users);
         }
 
-        [HttpGet("userId")]
+        [HttpGet("{userId}")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(400)]
         public IActionResult GetUser(int userId)
@@ -108,7 +108,7 @@ namespace ESTIGamingAPI.Controllers
             return Ok("Atualizou o utilizador " + userId + " com sucesso");
         }
 
-        [HttpDelete("userId")]
+        [HttpDelete("{userId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
