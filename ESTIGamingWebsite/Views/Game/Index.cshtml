@@ -9,9 +9,9 @@
 @if (ViewBag.UserType == "1")
 {
     <p>
-        <a asp-controller="Game" asp-action="Create">Adicionar um novo jogo</a>
-        <a asp-controller="Genre" asp-action="Index">Gerir Generos</a>
-        <a asp-controller="Platform" asp-action="Index">Gerir Plataformas</a>
+        <a style="margin-right: 20px;" asp-controller="Game" asp-action="Create">Adicionar um novo jogo</a>
+        <a style="margin-right: 20px;" asp-controller="Genre" asp-action="Index">Gerir Generos</a>
+        <a style="margin-right: 20px;" asp-controller="Platform" asp-action="Index">Gerir Plataformas</a>
     </p>  
 }
 
@@ -69,6 +69,9 @@
             {
                 <td>
                     @Html.ActionLink("Editar", "Edit", new {  id=item.Id  })
+                </td>
+                <td>
+                    @Html.ActionLink("Eliminar", "Delete", new {  id=item.Id  })
                 </td>
             }
         </tr>

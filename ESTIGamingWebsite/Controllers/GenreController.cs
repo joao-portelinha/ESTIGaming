@@ -163,16 +163,18 @@ namespace ESTIGamingWebsite.Controllers
         [Route("/Genre/{id:int}/Delete")]
         public async Task<IActionResult> Delete(int id)
         {
-                var requestDeleteGenre = new HttpRequestMessage(HttpMethod.Delete,
-                                            apiPath + "/Genre/" + id);
+            var requestDeleteGenre = new HttpRequestMessage(HttpMethod.Delete,
+                                            apiPath + "Genre/" + id);
 
-                var client = _clientFactory.CreateClient();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var token = HttpContext.Session.GetString("token");
-                client.DefaultRequestHeaders.Add("Token", token);
-                var response = await client.SendAsync(requestDeleteGenre);
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Add("Token", token);
+            var response = await client.SendAsync(requestDeleteGenre);
 
-                return Redirect("/Genre/Index");
+            response.EnsureSuccessStatusCode();
+
+            return Redirect("/Genre/Index");
         }
     }
 }

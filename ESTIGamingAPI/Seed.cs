@@ -20,7 +20,7 @@ namespace ESTIGamingAPI
                     {
                         Name = "God of War",
                         Price = 49.99M,
-                        Description = "Teste",
+                        Description = "God of War é um jogo eletrônico de ação-aventura desenvolvido pela Santa Monica Studio e publicado pela Sony Interactive Entertainment. Foi lançado em 20 de abril de 2018 para PlayStation 4 e em 14 de janeiro de 2022 para Microsoft Windows.",
                         Rating = 9.4M,
                         ImageURL = "https://assets.reedpopcdn.com/god-of-war-walkthrough-guide-5004-1524154731667.jpg/BROK/resize/1200x1200%3E/format/jpg/quality/70/god-of-war-walkthrough-guide-5004-1524154731667.jpg",
                         Genre = new Genre()

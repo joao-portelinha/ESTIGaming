@@ -157,5 +157,23 @@ namespace ESTIGamingWebsite.Controllers
 
             return Redirect("/Platform/Index");
         }
+
+        [HttpGet]
+        [Route("/Platform/{id:int}/Delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var requestDeletePlatform = new HttpRequestMessage(HttpMethod.Delete,
+                                            apiPath + "Platform/" + id);
+
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Add("Token", token);
+            var response = await client.SendAsync(requestDeletePlatform);
+
+            response.EnsureSuccessStatusCode();
+
+            return Redirect("/Platform/Index");
+        }
     }
 }

@@ -349,5 +349,23 @@ namespace ESTIGamingWebsite.Controllers
 
             return Redirect("/Game/Index");
         }
+
+        [HttpGet]
+        [Route("/Game/{id:int}/Delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var requestDeleteGame = new HttpRequestMessage(HttpMethod.Delete,
+                                            apiPath + "Game/" + id);
+
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Add("Token", token);
+            var response = await client.SendAsync(requestDeleteGame);
+
+            response.EnsureSuccessStatusCode();
+
+            return Redirect("/Game/Index");
+        }
     }
 }
