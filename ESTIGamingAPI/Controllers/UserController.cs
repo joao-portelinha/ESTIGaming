@@ -12,13 +12,11 @@ namespace ESTIGamingAPI.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
 
         public UserController(IUserRepository userRepository, IRoleRepository roleRepository, IMapper mapper)
         {
             _userRepository = userRepository;
-            _roleRepository = roleRepository;
             _mapper= mapper;
         }
 
@@ -53,7 +51,7 @@ namespace ESTIGamingAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateUser([FromQuery] int roleId, [FromBody] UserDto userCreate)
+        public IActionResult CreateUser([FromBody] UserDto userCreate)
         {
             if (userCreate == null)
                 return BadRequest(ModelState);
@@ -71,7 +69,6 @@ namespace ESTIGamingAPI.Controllers
                 return BadRequest(ModelState);
 
             var userMap = _mapper.Map<User>(userCreate);
-            userMap.Role = _roleRepository.GetRole(roleId);
 
             if (!_userRepository.CreateUser(userMap))
             {
@@ -86,7 +83,7 @@ namespace ESTIGamingAPI.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateUser(int userId, [FromQuery] int roleId, [FromBody] UserDto updatedUser)
+        public IActionResult UpdateUser(int userId, [FromBody] UserDto updatedUser)
         {
             if (updatedUser == null)
                 return BadRequest(ModelState);
@@ -101,7 +98,6 @@ namespace ESTIGamingAPI.Controllers
                 return BadRequest();
 
             var userMap = _mapper.Map<User>(updatedUser);
-            userMap.Role = _roleRepository.GetRole(roleId);
 
             if (!_userRepository.UpdateUser(userMap))
             {

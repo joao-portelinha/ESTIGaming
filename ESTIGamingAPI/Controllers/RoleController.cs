@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ESTIGamingAPI.Dto;
+using ESTIGamingAPI.Filter;
 using ESTIGamingAPI.Interfaces;
 using ESTIGamingAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ namespace ESTIGamingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [TokenFilter]
     public class RoleController : Controller
     {
         private readonly IRoleRepository _roleRepository;

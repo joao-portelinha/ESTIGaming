@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ESTIGamingAPI.Dto;
+using ESTIGamingAPI.Filter;
 using ESTIGamingAPI.Interfaces;
 using ESTIGamingAPI.Models;
 using ESTIGamingAPI.Repository;
@@ -9,6 +10,7 @@ namespace ESTIGamingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [TokenFilter]
     public class PlatformController : Controller
     {
         private readonly IPlatformRepository _platformRepository;

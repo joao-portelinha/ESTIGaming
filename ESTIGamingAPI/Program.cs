@@ -3,12 +3,18 @@ using ESTIGamingAPI.Data;
 using ESTIGamingAPI.Interfaces;
 using ESTIGamingAPI.Repository;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddSingleton<ITokenManager, TokenManager>();
 builder.Services.AddControllers();
+builder.Services.AddMvc()
+        .AddNewtonsoftJson(
+          options => {
+              options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+          });
 builder.Services.AddTransient<Seed>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IGameRepository, GameRepository>();

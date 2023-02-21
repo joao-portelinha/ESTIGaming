@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ESTIGamingAPI.Dto;
+using ESTIGamingAPI.Filter;
 using ESTIGamingAPI.Interfaces;
 using ESTIGamingAPI.Models;
 using ESTIGamingAPI.Repository;
@@ -9,6 +10,7 @@ namespace ESTIGamingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [TokenFilter]
     public class GameController : Controller
     {
         private readonly IGameRepository _gameRepository;
@@ -55,7 +57,7 @@ namespace ESTIGamingAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateGame([FromQuery] int genreId, int platformId, [FromBody] GameDto gameCreate)
+        public IActionResult CreateGame([FromBody] GameDto gameCreate, int genreId, int platformId)
         {
             if (gameCreate == null)
                 return BadRequest(ModelState);

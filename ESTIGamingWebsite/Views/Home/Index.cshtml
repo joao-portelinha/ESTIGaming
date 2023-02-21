@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">ESTIGaming</h1>
+    <br />
+    <hr />
+
+    <h2>O que pretende fazer?</h2>
+    <br />
+    @if(ViewBag.UserType == null)
+    {
+        <div class="text-center">
+        <a asp-controller="Login" asp-action="Index" class="btn btn-primary">Login</a>
+            <a asp-controller="Login" asp-action="Register" class="btn btn-primary">Criar Conta</a>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <a asp-controller="Game" asp-action="Index" class="btn btn-primary">
+                Ver Jogos
+            </a>
+        </div>
+    }
+</div>
