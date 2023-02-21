@@ -7,6 +7,8 @@
         public decimal Price { get; set; }
         public string Description { get; set; }
         public decimal Rating { get; set; }
+        public int GenreId { get; set; }
+        public int PlatformId { get; set; }
         public string ImageURL { get; set; }
     }
 }

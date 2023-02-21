@@ -4,7 +4,7 @@
     ViewData["Title"] = "Detalhes";
 }
 
-<h1>Detalhes do do jogo @Html.DisplayFor(model => model.Name)</h1>
+<h1>Detalhes do jogo @Html.DisplayFor(model => model.Name)</h1>
 
 <div>
     <h4>@Html.DisplayFor(model => model.Name)</h4>
@@ -34,7 +34,14 @@
         <dd>
             @Html.DisplayFor(model => model.Rating)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.GenreId)
+        </dt>
+        <dd class = "col-sm-10">
+            @ViewBag.Genre
+        </dd>       
     </dl>
+    <img src="@Html.DisplayFor(model => model.ImageURL)" alt="Game Image" width="200" height="150">
 </div>
 <div>
     <a asp-action="Index">Voltar atrás</a>

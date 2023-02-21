@@ -124,7 +124,7 @@ namespace ESTIGamingWebsite.Controllers
                     }
                 }
 
-                if (user != null && user.Password == password)
+                if (user != null && (user.Password == password || Crypto.VerifyHashedPassword(user.Password, password)))
                 {
                     var requestToken = new HttpRequestMessage(HttpMethod.Get,
                         apiPath + "Token");

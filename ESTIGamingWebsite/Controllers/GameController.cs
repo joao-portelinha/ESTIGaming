@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using ESTIGamingWebsite.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ESTIGamingWebsite.Controllers
 {
@@ -24,6 +24,41 @@ namespace ESTIGamingWebsite.Controllers
             var token = HttpContext.Session.GetString("token");
             client.DefaultRequestHeaders.Add("Token", token);
 
+            // Pedir Generos
+            var requestGenres = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Genre");
+
+            var responseGenres = await client.SendAsync(requestGenres);
+
+            if (responseGenres.IsSuccessStatusCode)
+            {
+                using var responseStream = await responseGenres.Content.ReadAsStreamAsync();
+                var allGenres = await JsonSerializer.DeserializeAsync<List<Genre>>
+                    (responseStream, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                ViewBag.Genres = allGenres;
+            }
+
+            // Pedir Plataformas
+            var requestPlatforms = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Platform");
+
+            var responsePlatforms = await client.SendAsync(requestPlatforms);
+
+            if (responsePlatforms.IsSuccessStatusCode)
+            {
+                using var responseStream = await responsePlatforms.Content.ReadAsStreamAsync();
+                var allPlatforms = await JsonSerializer.DeserializeAsync<List<Platform>>
+                    (responseStream, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                ViewBag.Platforms = allPlatforms;
+            }
+
+            // Pedir Jogos
             var requestGames = new HttpRequestMessage(HttpMethod.Get,
                 apiPath + "Game");
 
@@ -56,13 +91,13 @@ namespace ESTIGamingWebsite.Controllers
         [Route("/Game/Details/{gameId:int}")]
         public async Task<IActionResult> Details(int gameId)
         {
-            var requestGame = new HttpRequestMessage(HttpMethod.Get,
-                apiPath + "Game/" + gameId);
-
             var client = _clientFactory.CreateClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var token = HttpContext.Session.GetString("token");
             client.DefaultRequestHeaders.Add("Token", token);
+
+            var requestGame = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Game/" + gameId);
 
             var response = await client.SendAsync(requestGame);
 
@@ -80,162 +115,221 @@ namespace ESTIGamingWebsite.Controllers
                 return Redirect("/Game/Index");
             }
 
+            var requestGenre = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Genre/" + game.GenreId);
+
+            var responseGenre = await client.SendAsync(requestGenre);
+
+            var genre = "";
+
+            if (responseGenre.IsSuccessStatusCode)
+            {
+                using var stream2 = await responseGenre.Content.ReadAsStreamAsync();
+                var gameGenre = await JsonSerializer.DeserializeAsync<Genre>
+                    (stream2, new JsonSerializerOptions
+                    { PropertyNameCaseInsensitive = true });
+
+                genre = gameGenre.Name;
+                ViewBag.Genre = genre;
+            }
+
             ViewBag.UserType = HttpContext.Session.GetString("userType");
             ViewBag.GameId = game.Id;
-            HttpContext.Session.SetString("alojamento", game.Id.ToString());
+            HttpContext.Session.SetString("Jogo", game.Id.ToString());
 
             return View(game);
         }
 
-        //public async Task<IActionResult> Create()
-        //{
-        //    var requestTipoAlojamentos = new HttpRequestMessage(HttpMethod.Get,
-        //        apiPath + "TipoAlojamentos");
+        public async Task<IActionResult> Create()
+        {
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Add("Token", token);
 
-        //    var client = _clientFactory.CreateClient();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //    var token = HttpContext.Session.GetString("token");
-        //    client.DefaultRequestHeaders.Add("Token", token);
+            var requestGenres = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Genre");
 
-        //    var response = await client.SendAsync(requestTipoAlojamentos);
+            var response = await client.SendAsync(requestGenres);
 
-        //    var tipos = new List<TipoAlojamento>();
+            var genres = new List<Genre>();
 
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        using var responseStream = await response.Content.ReadAsStreamAsync();
-        //        var tipoAlojamentos = await JsonSerializer.DeserializeAsync<List<TipoAlojamento>>
-        //            (responseStream, new JsonSerializerOptions
-        //            {
-        //                PropertyNameCaseInsensitive = true
-        //            });
-        //        tipos = tipoAlojamentos;
-        //    }
+            if (response.IsSuccessStatusCode)
+            {
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                var AllGenres = await JsonSerializer.DeserializeAsync<List<Genre>>
+                    (responseStream, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                genres = AllGenres;
+            }
 
-        //    ViewData["TipoAlojamentoId"] = new SelectList(tipos, "TipoAlojamentoId", "Tipo");
-        //    ViewBag.UserType = HttpContext.Session.GetString("userType");
+            var requestPlatforms = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Platform");
 
-        //    return View();
-        //}
+            var response2 = await client.SendAsync(requestPlatforms);
 
-        //[HttpPost]
-        //public async Task<IActionResult> Store(Alojamento alojamento)
-        //{
-        //    var requestPostAlojamento = new HttpRequestMessage(HttpMethod.Post,
-        //        apiPath + "Alojamentos/");
+            var platforms = new List<Platform>();
 
-        //    requestPostAlojamento.Content = new StringContent(
-        //        JsonSerializer.Serialize(alojamento,
-        //        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
-        //        Encoding.UTF8, "application/json");
+            if (response2.IsSuccessStatusCode)
+            {
+                using var responseStream2 = await response2.Content.ReadAsStreamAsync();
+                var allPlatforms = await JsonSerializer.DeserializeAsync<List<Platform>>
+                    (responseStream2, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                platforms = allPlatforms;
+            }
 
-        //    var client = _clientFactory.CreateClient();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //    var token = HttpContext.Session.GetString("token");
-        //    client.DefaultRequestHeaders.Add("Token", token);
+            ViewData["GenreId"] = new SelectList(genres, "Id", "Name");
+            ViewData["PlatformId"] = new SelectList(platforms, "Id", "Name");
+            ViewBag.UserType = HttpContext.Session.GetString("userType");
 
-        //    var response = await client.PostAsJsonAsync(
-        //        apiPath + "Alojamentos/", alojamento);
-        //    response.EnsureSuccessStatusCode();
+            return View();
+        }
 
-        //    ViewBag.UserType = HttpContext.Session.GetString("userType");
+        [HttpPost]
+        public async Task<IActionResult> Create(Game game)
+        {
+            var requestPostGame = new HttpRequestMessage(HttpMethod.Post,
+                apiPath + "Game/");
 
-        //    return Redirect("/Alojamentos/Index");
-        //}
+            var g = game;
 
-        //[Route("/Alojamentos/{id:int}/Edit")]
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    var requestAlojamento = new HttpRequestMessage(HttpMethod.Get,
-        //        apiPath + "Alojamentos/" + id);
+            requestPostGame.Content = new StringContent(
+                JsonSerializer.Serialize(game,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
+                Encoding.UTF8, "application/json");
 
-        //    var client = _clientFactory.CreateClient();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //    var token = HttpContext.Session.GetString("token");
-        //    client.DefaultRequestHeaders.Add("Token", token);
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Add("Token", token);
 
-        //    var alojamentoEditar = new Alojamento();
+            var response = await client.PostAsJsonAsync(
+                apiPath + "Game/", game);
+            response.EnsureSuccessStatusCode();
 
-        //    var response = await client.SendAsync(requestAlojamento);
+            ViewBag.UserType = HttpContext.Session.GetString("userType");
 
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        using var responseStream = await response.Content.ReadAsStreamAsync();
-        //        var alojamento = await JsonSerializer.DeserializeAsync
-        //            <Alojamento>(responseStream, new JsonSerializerOptions
-        //            { PropertyNameCaseInsensitive = true });
-        //        alojamentoEditar = alojamento;
+            return Redirect("/Game/Index");
+        }
 
-        //        var requestTipoAlojamentos = new HttpRequestMessage(HttpMethod.Get,
-        //            apiPath + "TipoAlojamentos");
+        [Route("/Game/{id:int}/Edit")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Add("Token", token);
 
-        //        var responseTipo = await client.SendAsync(requestTipoAlojamentos);
+            var requestGame = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Game/" + id);
 
-        //        var tipos = new List<TipoAlojamento>();
+            var gameEdit = new Game();
 
-        //        if (responseTipo.IsSuccessStatusCode)
-        //        {
-        //            using var stream = await responseTipo.Content.ReadAsStreamAsync();
-        //            var tipoAlojamentos = await JsonSerializer.DeserializeAsync
-        //                <List<TipoAlojamento>>
-        //                (stream, new JsonSerializerOptions
-        //                {
-        //                    PropertyNameCaseInsensitive = true
-        //                });
+            var response = await client.SendAsync(requestGame);
 
-        //            tipos = tipoAlojamentos;
-        //        }
+            if (response.IsSuccessStatusCode)
+            {
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                var game = await JsonSerializer.DeserializeAsync
+                    <Game>(responseStream, new JsonSerializerOptions
+                    { PropertyNameCaseInsensitive = true });
+                gameEdit = game;
 
-        //        ViewData["TipoAlojamentoId"] = new SelectList(tipos, "TipoAlojamentoId", "Tipo");
-        //    }
-        //    else
-        //    {
-        //        return Redirect("/Alojamentos/Index");
-        //    }
+                var requestGenre = new HttpRequestMessage(HttpMethod.Get,
+                    apiPath + "Genre");
 
-        //    ViewBag.UserType = HttpContext.Session.GetString("userType");
+                var responseGenres = await client.SendAsync(requestGenre);
 
-        //    return View(alojamentoEditar);
-        //}
+                var genres = new List<Genre>();
 
-        //[HttpPost]
-        //[Route("/Alojamentos/{id:int}/Edit")]
-        //public async Task<IActionResult> Edit(Alojamento novo, int id)
-        //{
-        //    var requestAlojamento = new HttpRequestMessage(HttpMethod.Get,
-        //        apiPath + "Alojamentos/" + id);
+                if (responseGenres.IsSuccessStatusCode)
+                {
+                    using var stream = await responseGenres.Content.ReadAsStreamAsync();
+                    var allGenres = await JsonSerializer.DeserializeAsync
+                        <List<Genre>>
+                        (stream, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
 
-        //    var client = _clientFactory.CreateClient();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //    var token = HttpContext.Session.GetString("token");
-        //    client.DefaultRequestHeaders.Add("Token", token);
+                    genres = allGenres;
+                }
 
-        //    var response = await client.SendAsync(requestAlojamento);
+                var requestPlatform = new HttpRequestMessage(HttpMethod.Get,
+                    apiPath + "Platform");
 
-        //    Alojamento aloj = new Alojamento();
+                var responsePlatform = await client.SendAsync(requestPlatform);
 
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        using var stream = await response.Content.ReadAsStreamAsync();
-        //        aloj = await JsonSerializer.DeserializeAsync<Alojamento>
-        //            (stream, new JsonSerializerOptions
-        //            { PropertyNameCaseInsensitive = true });
-        //    }
+                var platforms = new List<Platform>();
 
-        //    var requestPutAlojamento = new HttpRequestMessage(HttpMethod.Put,
-        //        apiPath + "Alojamentos/" + id);
+                if (responsePlatform.IsSuccessStatusCode)
+                {
+                    using var stream = await responsePlatform.Content.ReadAsStreamAsync();
+                    var allPlatforms = await JsonSerializer.DeserializeAsync
+                        <List<Platform>>
+                        (stream, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
 
-        //    novo.AlojamentoId = id;
+                    platforms = allPlatforms;
+                }
+                ViewData["GenreId"] = new SelectList(genres, "Id", "Name");
+                ViewData["PlatformId"] = new SelectList(platforms, "Id", "Name");
+            }
+            else
+            {
+                return Redirect("/Game/Index");
+            }
 
-        //    requestPutAlojamento.Content = new StringContent(
-        //        JsonSerializer.Serialize(novo, new JsonSerializerOptions
-        //        { PropertyNameCaseInsensitive = true }), Encoding.UTF8, "application/json");
+            ViewBag.UserType = HttpContext.Session.GetString("userType");
 
-        //    await client.SendAsync(requestPutAlojamento);
+            return View(gameEdit);
+        }
 
-        //    ViewBag.UserType = HttpContext.Session.GetString("userType");
+        [HttpPost]
+        [Route("/Game/{id:int}/Edit")]
+        public async Task<IActionResult> Edit(Game edit, int id)
+        {
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Add("Token", token);
 
-        //    return Redirect("/Alojamentos/Index");
-        //}
+            var requestGame = new HttpRequestMessage(HttpMethod.Get,
+                apiPath + "Game/" + id);
+
+            var response = await client.SendAsync(requestGame);
+
+            Game game = new Game();
+
+            if (response.IsSuccessStatusCode)
+            {
+                using var stream = await response.Content.ReadAsStreamAsync();
+                game = await JsonSerializer.DeserializeAsync<Game>
+                    (stream, new JsonSerializerOptions
+                    { PropertyNameCaseInsensitive = true });
+            }
+
+            var requestPutGame = new HttpRequestMessage(HttpMethod.Put,
+                apiPath + "Game/" + id);
+
+            edit.Id = id;
+
+            requestPutGame.Content = new StringContent(
+                JsonSerializer.Serialize(edit, new JsonSerializerOptions
+                { PropertyNameCaseInsensitive = true }), Encoding.UTF8, "application/json");
+
+            await client.SendAsync(requestPutGame);
+
+            ViewBag.UserType = HttpContext.Session.GetString("userType");
+
+            return Redirect("/Game/Index");
+        }
     }
 }

@@ -3,7 +3,6 @@ using ESTIGamingAPI.Dto;
 using ESTIGamingAPI.Filter;
 using ESTIGamingAPI.Interfaces;
 using ESTIGamingAPI.Models;
-using ESTIGamingAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESTIGamingAPI.Controllers
@@ -14,15 +13,11 @@ namespace ESTIGamingAPI.Controllers
     public class GameController : Controller
     {
         private readonly IGameRepository _gameRepository;
-        private readonly IGenreRepository _genreRepository;
-        private readonly IPlatformRepository _platformRepository;
         private readonly IMapper _mapper;
 
-        public GameController(IGameRepository gameRepository, IGenreRepository genreRepository, IPlatformRepository platformRepository, IMapper mapper)
+        public GameController(IGameRepository gameRepository, IMapper mapper)
         {
             _gameRepository = gameRepository;
-            _genreRepository = genreRepository;
-            _platformRepository = platformRepository;
             _mapper = mapper;
         }
 
@@ -57,7 +52,7 @@ namespace ESTIGamingAPI.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateGame([FromBody] GameDto gameCreate, int genreId, int platformId)
+        public IActionResult CreateGame([FromBody] GameDto gameCreate)
         {
             if (gameCreate == null)
                 return BadRequest(ModelState);
@@ -66,8 +61,6 @@ namespace ESTIGamingAPI.Controllers
                 return BadRequest(ModelState);
 
             var gameMap = _mapper.Map<Game>(gameCreate);
-            gameMap.Genre = _genreRepository.GetGenre(genreId);
-            gameMap.Platform = _platformRepository.GetPlatform(platformId);
 
             if (!_gameRepository.CreateGame(gameMap))
             {
@@ -82,7 +75,7 @@ namespace ESTIGamingAPI.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateGame(int gameId, [FromQuery] int genreId, int platformId, [FromBody] GameDto updatedGame) 
+        public IActionResult UpdateGame(int gameId, [FromBody] GameDto updatedGame) 
         {
             if(updatedGame == null)
                 return BadRequest(ModelState);
@@ -97,8 +90,6 @@ namespace ESTIGamingAPI.Controllers
                 return BadRequest();
 
             var gameMap = _mapper.Map<Game>(updatedGame);
-            gameMap.Genre = _genreRepository.GetGenre(genreId);
-            gameMap.Platform = _platformRepository.GetPlatform(platformId);
 
             if (!_gameRepository.UpdateGame(gameMap))
             {

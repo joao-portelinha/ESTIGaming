@@ -8,6 +8,8 @@
         public string Description { get; set; }
         public decimal Rating { get; set; }
         public string ImageURL { get; set; }
+        public int GenreId { get; set; }
+        public int PlatformId { get; set; }
         public Genre Genre { get; set; }
         public Platform Platform { get; set; }
     }

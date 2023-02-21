@@ -9,7 +9,9 @@
 @if (ViewBag.UserType == "1")
 {
     <p>
-        <a asp-action="Create">Adicionar um novo jogo</a>
+        <a asp-controller="Game" asp-action="Create">Adicionar um novo jogo</a>
+        @*<a asp-controller="Game" asp-action="Create">Adicionar um novo jogo</a>*@
+        @*<a asp-controller="Game" asp-action="Create">Adicionar um novo jogo</a>*@
     </p>  
 }
 
